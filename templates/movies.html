@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies - CineBook</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🎬 CineBook</div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('movie_list') }}" class="active">Movies</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="page-title">Now Showing</h1>
+        
+        <div class="filters">
+            <select class="filter-select">
+                <option>All Genres</option>
+                <option>Action</option>
+                <option>Comedy</option>
+                <option>Drama</option>
+                <option>Sci-Fi</option>
+            </select>
+            <select class="filter-select">
+                <option>All Languages</option>
+                <option>English</option>
+                <option>Hindi</option>
+                <option>Spanish</option>
+            </select>
+        </div>
+
+        <div class="movie-list">
+            {% for movie in movies %}
+            <div class="movie-list-item">
+                <div class="movie-list-poster">{{ movie.poster }}</div>
+                <div class="movie-list-details">
+                    <h2>{{ movie.title }}</h2>
+                    <div class="movie-list-meta">
+                        <span>{{ movie.genre }}</span>
+                        <span>{{ movie.duration }}</span>
+                        <span>{{ movie.rating }}</span>
+                    </div>
+                    <p>{{ movie.description }}</p>
+                    <a href="{{ url_for('movie_detail', movie_id=movie.id) }}" class="btn btn-primary">Book Tickets</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 CineBook. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Tickets - {{ movie.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🎬 CineBook</div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('movie_list') }}">Movies</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="booking-container">
+            <div class="movie-summary">
+                <div class="movie-summary-poster">{{ movie.poster }}</div>
+                <div class="movie-summary-details">
+                    <h1>{{ movie.title }}</h1>
+                    <p><strong>Genre:</strong> {{ movie.genre }}</p>
+                    <p><strong>Duration:</strong> {{ movie.duration }}</p>
+                    <p><strong>Rating:</strong> {{ movie.rating }}</p>
+                </div>
+            </div>
+
+            <form action="{{ url_for('book_tickets', movie_id=movie.id) }}" method="POST" class="booking-form">
+                <h2>Booking Details</h2>
+                
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="showtime">Select Showtime *</label>
+                    <select id="showtime" name="showtime" required>
+                        <option value="">Choose a showtime</option>
+                        {% for time in showtimes %}
+                        <option value="{{ time }}">{{ time }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tickets">Number of Tickets *</label>
+                    <input type="number" id="tickets" name="tickets" min="1" max="10" value="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Select Seats *</label>
+                    <div class="seat-layout">
+                        {% for row in ['A', 'B', 'C', 'D', 'E', 'F'] %}
+                        <div class="seat-row">
+                            <span class="row-label">{{ row }}</span>
+                            {% for num in range(1, 11) %}
+                            <div class="seat">
+                                <input type="checkbox" name="seats" value="{{ row }}{{ num }}" id="seat-{{ row }}{{ num }}">
+                                <label for="seat-{{ row }}{{ num }}">{{ row }}{{ num }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <small class="seat-note">Select your preferred seats (maximum 10 seats)</small>
+                </div>
+
+                <div class="price-summary">
+                    <h3>Price Summary</h3>
+                    <div class="price-item">
+                        <span>Ticket Price:</span>
+                        <span>$12.00 each</span>
+                    </div>
+                    <div class="price-item total">
+                        <span>Total:</span>
+                        <span id="total-price">$12.00</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 CineBook. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Simple price calculator
+        document.getElementById('tickets').addEventListener('input', function(e) {
+            const tickets = parseInt(e.target.value) || 1;
+            const total = tickets * 12;
+            document.getElementById('total-price').textContent = `$${total}.00`;
+        });
+    </script>
+</body>
+</html>

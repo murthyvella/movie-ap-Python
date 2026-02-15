@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineBook - Movie Booking</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🎬 CineBook</div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}" class="active">Home</a></li>
+                <li><a href="{{ url_for('movie_list') }}">Movies</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="hero">
+            <h1>Welcome to CineBook</h1>
+            <p>Book your favorite movies with just a few clicks</p>
+            <a href="{{ url_for('movie_list') }}" class="btn btn-primary">Browse Movies</a>
+        </div>
+
+        <h2 class="section-title">Now Showing</h2>
+        <div class="movie-grid">
+            {% for movie in movies %}
+            <div class="movie-card">
+                <div class="movie-poster">{{ movie.poster }}</div>
+                <div class="movie-info">
+                    <h3>{{ movie.title }}</h3>
+                    <div class="movie-meta">
+                        <span class="genre">{{ movie.genre }}</span>
+                        <span class="duration">{{ movie.duration }}</span>
+                        <span class="rating">{{ movie.rating }}</span>
+                    </div>
+                    <p class="movie-description">{{ movie.description[:100] }}...</p>
+                    <a href="{{ url_for('movie_detail', movie_id=movie.id) }}" class="btn btn-secondary">Book Now</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 CineBook. All rights reserved.</p>
+    </footer>
+</body>
+</html>
